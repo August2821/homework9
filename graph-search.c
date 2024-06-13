@@ -19,7 +19,7 @@ void InsertEdge(Graph* g, int u, int v);
 void PrintGraph(Graph* g);
 void Quit(Graph* g);
 
-void DepthFirstSearch();
+void DepthFirstSearch(Graph* g);
 void BreathFirstSearch();
 
 int main(){
@@ -55,7 +55,7 @@ int main(){
 			InsertVertex(g,v);
 			break;
 		case 'd': case 'D':
-			DepthFirstSearch();
+			DepthFirstSearch(g);
 			break;
 		case 'p': case 'P':
 			PrintGraph(g);
@@ -104,8 +104,104 @@ void InsertVertex(Graph* g, int v){
 	g->numVertex[v]=1;
 }
 
-void DepthFirstSearch(){
-	
+void DepthFirstSearch(Graph* g){
+	//start 인덱스 찾기
+	int start;
+	for(int i=0;i<MAX_VERTEX;i++){
+		if(g->adjList[i]!=NULL){
+			start=i;
+			break;
+		}
+	}
+
+	//DFS를 할 수 없는 조건
+	if (g == NULL || start < 0 || start >= MAX_VERTEX) return;
+    
+    // 방문 여부를 표시하는 방문 배열 생성
+    int visited[MAX_VERTEX];
+	for(int i=0;i<MAX_VERTEX;i++) visited[i]=0;
+
+    // 스택 생성
+    Node* stack[MAX_VERTEX];
+	int top = -1;
+
+	//방문하지 않은 노드여야 함
+	// visited[i]==1
+
+	// 시작 정점을 스택에 삽입하고 방문 처리
+    stack[++top] = g->adjList[start];
+    visited[start] = 1;
+
+    int n=start;
+    printf("%d ", start);
+
+    for (int i = start; i < MAX_VERTEX; i++) {
+		if(g->adjList[i]!=NULL){
+			Node* p = g->adjList[i];
+			while (p != NULL) {
+                if(visited[p->vertex]==0){
+                    visited[p->vertex]=1;
+                }
+				printf("%d ", p->vertex);
+				p = p->next;
+			}
+		}
+	}
+
+    // while(top!=-1) {
+    //     Node* current = stack[top--];
+    //     printf("%d ", current->vertex);
+    //     // if(current->next==NULL) current=g->adjList[current->vertex];
+    //     // printf("current=%d, visited[%d]=%d, top=%d\n",current->vertex,n,visited[n],top);
+
+    //     // 현재 노드의 모든 인접 노드 탐색 (오름차순 정점 번호)
+    //     while (current != NULL) {
+    //         int v = current->vertex;
+
+    //         // 방문하지 않은 인접 노드를 스택에 넣고 방문 처리
+    //         if (!visited[v]) {
+    //             stack[++top] = g->adjList[v];
+    //             visited[v] = 1;
+    //         }
+
+    //         // 방문했지만 아직 스택에 남아있는 경우 건너뛴다.
+    //         else if (visited[v] == 1 && current->next != NULL) {
+    //             current = current->next;
+    //             continue;
+    //         }
+
+    //         // 방문했거나 끝까지 도달했으면 다음 노드로 이동
+    //         current = current->next;
+    //     }
+
+        // if(current->next==NULL) 
+        // for (Node* neighbor = current; neighbor != NULL; neighbor = neighbor->next) {
+        //     int v = neighbor->vertex;
+        //     n=neighbor->vertex;
+            
+        //     printf("neighbor=%d, visited[%d]=%d, top=%d\n",neighbor->vertex,n,visited[v],top);
+            
+        //     // 방문하지 않은 인접 노드를 스택에 넣고 방문 처리
+        //     if (!visited[v]) { //visited[v]==0 이면
+        //         stack[++top] = neighbor;
+        //         visited[v] = 1;
+        //     }else{
+        //         --top;
+        //     }
+        //     printf("neighbor=%d, visited[%d]=%d, top=%d\n",neighbor->vertex,n,visited[v],top);
+        // }
+        // printf("\n");
+
+        // int flag=0;
+        // for(int i=0;i<MAX_VERTEX;i++){
+        //     if(visited[i]==1) flag++;
+        //     else break;
+        // }
+        // if(flag==MAX_VERTEX-1) break;
+
+    // }
+    // printf("\n\n");
+    // for(int i=0;i<MAX_VERTEX;i++) printf("visited[%d]=%d ",i,visited[i]);
 }
 
 void PrintGraph(Graph* g){
